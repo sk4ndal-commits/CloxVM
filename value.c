@@ -23,7 +23,7 @@ void writeValueArray(ValueArray *valueArray, Value value) {
     valueArray->count++;
 }
 
-void freeValueArray(ValueArray* valueArray) {
+void freeValueArray(ValueArray *valueArray) {
     FREE_ARRAY(Value, valueArray->values, valueArray->capacity);
     initValueArray(valueArray);
 }

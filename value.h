@@ -12,12 +12,14 @@ typedef double Value;
 typedef struct {
     int count;
     int capacity;
-    Value* values;
-} ValueArray ;
+    Value *values;
+} ValueArray;
 
 
-void initValueArray(ValueArray* valueArray);
-void writeValueArray(ValueArray* valueArray, Value value);
-void freeValueArray(ValueArray* valueArray);
+void initValueArray(ValueArray *valueArray);
+
+void writeValueArray(ValueArray *valueArray, Value value);
+
+void freeValueArray(ValueArray *valueArray);
 
 #endif //CLOXVM_VALUE_H

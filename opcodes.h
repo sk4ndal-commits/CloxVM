@@ -8,6 +8,6 @@
 typedef enum {
     OP_RETURN,
     OP_CONSTANT
-} OpCode ;
+} OpCode;
 
 #endif //CLOXVM_OPCODES_H

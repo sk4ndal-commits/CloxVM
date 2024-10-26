@@ -17,8 +17,7 @@
     reallocate(pointer, sizeof(type) * capacity, 0)
 
 
-void* reallocate(void* pointer, size_t oldSize, size_t newSize);
-
+void *reallocate(void *pointer, size_t oldSize, size_t newSize);
 
 
 #endif //CLOXVM_MEMORY_H
