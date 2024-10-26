@@ -26,9 +26,9 @@ int disassembleInstruction(Chunk *chunk, int offset) {
     printf("%04d ", offset);
 
     if (offset > 0 && chunk->lines[offset - 1] == chunk->lines[offset])
-        printf("    |");
+        printf("    | ");
     else
-        printf("%4d", chunk->lines[offset]);
+        printf("%4d ", chunk->lines[offset]);
 
     uint8_t instruction = chunk->code[offset];
 
@@ -49,7 +49,6 @@ int simpleInstruction(const char *name, int offset) {
 }
 
 int constantInstruction(const char *name, Chunk *chunk, int offset) {
-    printf("%s\n", name);
     uint8_t constantIdx = chunk->code[offset + 1];
     printf("%-16s %4d", name, constantIdx);
     printValue(chunk->constants.values[constantIdx]);
