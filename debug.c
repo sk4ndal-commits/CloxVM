@@ -7,10 +7,10 @@
 #include "opcodes.h"
 
 int simpleInstruction(const char *name, int offset);
+int negateInstruction(const char *name, int offset);
 
 int constantInstruction(const char *name, Chunk *chunk, int offset);
 
-void printValue(Value value);
 
 void disassembleChunk(Chunk *chunk, const char *name) {
 
@@ -35,6 +35,8 @@ int disassembleInstruction(Chunk *chunk, int offset) {
     switch (instruction) {
         case OP_RETURN:
             return simpleInstruction("OP_RETURN", offset);
+        case OP_NEGATE:
+            return negateInstruction("OP_NEGATE", offset);
         case OP_CONSTANT:
             return constantInstruction("OP_CONSTANT", chunk, offset);
         default:
@@ -44,6 +46,11 @@ int disassembleInstruction(Chunk *chunk, int offset) {
 }
 
 int simpleInstruction(const char *name, int offset) {
+    printf("%s\n", name);
+    return offset + 1;
+}
+
+int negateInstruction(const char *name, int offset) {
     printf("%s\n", name);
     return offset + 1;
 }
