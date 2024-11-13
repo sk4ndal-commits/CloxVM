@@ -2,10 +2,11 @@
 // Created by sascha-roggatz on 28.10.24.
 //
 
-#include <bzlib.h>
 #include "vm.h"
 #include "opcodes.h"
 #include "debug.h"
+#include "compiler.h"
+#include <stdio.h>
 
 static void resetStack();
 
@@ -21,10 +22,9 @@ void freeVM() {
 }
 
 
-InterpretResult interpret(Chunk *chunk) {
-    vm.chunk = chunk;
-    vm.ip = chunk->code;
-    return run();
+InterpretResult interpret(const char *source) {
+    compile(source);
+    return INTERPRET_OK;
 }
 
 static InterpretResult run() {

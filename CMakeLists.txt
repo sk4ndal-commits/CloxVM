@@ -17,4 +17,6 @@ add_executable(cloxvm main.c
         vm.c
         vm.h
         interpretresult.h
+        compiler.c
+        scanner.c
 )
