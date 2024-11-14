@@ -1,7 +1,6 @@
 #ifndef CLOXVM_SCANNER_H
 #define CLOXVM_SCANNER_H
 
-
 #include "common.h"
 
 typedef enum {

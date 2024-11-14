@@ -6,7 +6,7 @@
 int main(void) {
 
     initVM();
-    interpret("\"Hello\"");
+    interpret("123.32");
 
     return 0;
 }

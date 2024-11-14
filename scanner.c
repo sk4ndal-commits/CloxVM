@@ -14,7 +14,11 @@ Token errorToken(const char *message);
 
 Token readString();
 
+Token readNumber();
+
 bool isAtEnd();
+
+bool isDigit(char c);
 
 char advance();
 
@@ -23,8 +27,6 @@ bool isNextToken(char expected);
 void skipWhitespace();
 
 static char peek();
-
-static char peekNext();
 
 Scanner scanner;
 
@@ -42,6 +44,7 @@ Token scanToken() {
     if (isAtEnd()) return makeToken(TOKEN_EOF);
 
     const char c = advance();
+
 
     switch (c) {
         case '(': return makeToken(TOKEN_LEFT_PAREN);
@@ -70,6 +73,10 @@ Token scanToken() {
         case '>': return makeToken(
                 isNextToken('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
         case '"': return readString();
+        default: {
+            if (isDigit(c)) return readNumber();
+        }
+            break;
     }
 
     return errorToken("Unexpected character");
@@ -136,6 +143,21 @@ bool isNextToken(const char expected) {
     return true;
 }
 
+Token readNumber() {
+    while (isDigit(peek())) advance();
+
+    if (peek() == '.' && !isAtEnd()) {
+        advance();
+        while (isDigit(peek())) advance();
+    }
+
+    return makeToken(TOKEN_NUMBER);
+}
+
+bool isDigit(char c) {
+    return c >= '0' && c <= '9';
+}
+
 char advance() {
     scanner.current++;
     return scanner.current[-1];
@@ -163,9 +185,4 @@ void skipWhitespace() {
 
 static char peek() {
     return *scanner.current;
-}
-
-static char peekNext() {
-    if (scanner.current[1] == '\0') return '\0';
-    return scanner.current[1];
 }
