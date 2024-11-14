@@ -4,6 +4,7 @@
 
 #include "scanner.h"
 
+#include <ctype.h>
 #include <string.h>
 
 Token makeToken(TokenType type);
@@ -16,9 +17,14 @@ Token readString();
 
 Token readNumber();
 
-bool isAtEnd();
+Token readIdentifier();
 
-bool isDigit(char c);
+static TokenType identifierType();
+
+TokenType checkKeyword(int offset, int len_suffix, const char *suffix,
+                       TokenType type);
+
+bool isAtEnd();
 
 char advance();
 
@@ -57,10 +63,10 @@ Token scanToken() {
         case '-': return makeToken(TOKEN_MINUS);
         case '+': return makeToken(TOKEN_PLUS);
         case '/':
-            if (isNextToken('\n')) {
+            if (isNextToken('/')) {
                 while (peek() != '\n' && !isAtEnd()) advance();
             } else {
-                return;
+                return makeToken(TOKEN_SLASH);
             }
             break;
         case '*': return makeToken(TOKEN_STAR);
@@ -74,9 +80,10 @@ Token scanToken() {
                 isNextToken('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
         case '"': return readString();
         default: {
-            if (isDigit(c)) return readNumber();
+            if (isdigit(c)) return readNumber();
+            if (isalpha(c) || c == '_') return readIdentifier();
         }
-            break;
+        break;
     }
 
     return errorToken("Unexpected character");
@@ -91,7 +98,8 @@ Token makeToken(const TokenType type) {
     return token;
 }
 
-Token makeStringToken(TokenType type, const char *startIdx, const char *endIdx) {
+Token makeStringToken(TokenType type, const char *startIdx,
+                      const char *endIdx) {
     Token token;
     token.type = type;
     token.start = startIdx;
@@ -120,15 +128,70 @@ Token readString() {
 
     advance();
 
-    const char* start = scanner.start;
-    const char* end = scanner.current;
+    const char *start = scanner.start;
+    const char *end = scanner.current;
 
     return makeStringToken(
         TOKEN_STRING,
-        &(start[1]),
-        &(end[-1]));
+        &start[1],
+        &end[-1]);
+}
 
+Token readIdentifier() {
+    while (isalpha(peek()) && !isAtEnd()) advance();
+    return makeToken(identifierType());
+}
 
+static TokenType identifierType() {
+    const char c = *scanner.start;
+
+    switch (c) {
+        case 'a': return checkKeyword(1, 2, "nd", TOKEN_AND);
+        case 'c': return checkKeyword(1, 4, "lass", TOKEN_CLASS);
+        case 'e': return checkKeyword(1, 3, "lse", TOKEN_ELSE);
+        case 'f': {
+            if (scanner.current - scanner.start >= 2) {
+                switch (scanner.start[1]) {
+                    case 'a': return checkKeyword(2, 3, "lse", TOKEN_FALSE);
+                    case 'o': return checkKeyword(2, 1, "r", TOKEN_FOR);
+                    case 'u': return checkKeyword(2, 1, "n", TOKEN_FUN);
+                }
+            }
+            break;
+        }
+        case 'i': return checkKeyword(1, 1, "f", TOKEN_IF);
+        case 'n': return checkKeyword(1, 2, "il", TOKEN_NIL);
+        case 'o': return checkKeyword(1, 1, "o", TOKEN_OR);
+        case 'p': return checkKeyword(1, 4, "rint", TOKEN_PRINT);
+        case 'r': return checkKeyword(1, 5, "eturn", TOKEN_RETURN);
+        case 's': return checkKeyword(1, 4, "uper", TOKEN_SUPER);
+        case 't': {
+            if (scanner.current - scanner.start >= 2) {
+                switch (scanner.start[1]) {
+                    case 'h': return checkKeyword(2, 2, "is", TOKEN_THIS);
+                    case 'r': return checkKeyword(2, 2, "ue", TOKEN_TRUE);
+                }
+            }
+            break;
+        }
+        case 'v': return checkKeyword(1, 2, "ar", TOKEN_VAR);
+        case 'w': return checkKeyword(1, 4, "hile", TOKEN_WHILE);
+    }
+    return TOKEN_IDENTIFIER;
+}
+
+TokenType checkKeyword(
+    const int offset,
+    const int len_suffix,
+    const char *suffix,
+    const TokenType type
+) {
+    if (scanner.current - scanner.start == offset + len_suffix &&
+        memcmp(scanner.start + offset, suffix, len_suffix) == 0) {
+        return type;
+    }
+
+    return TOKEN_IDENTIFIER;
 }
 
 bool isAtEnd() {
@@ -144,18 +207,14 @@ bool isNextToken(const char expected) {
 }
 
 Token readNumber() {
-    while (isDigit(peek())) advance();
+    while (isdigit(peek())) advance();
 
     if (peek() == '.' && !isAtEnd()) {
         advance();
-        while (isDigit(peek())) advance();
+        while (isdigit(peek())) advance();
     }
 
     return makeToken(TOKEN_NUMBER);
-}
-
-bool isDigit(char c) {
-    return c >= '0' && c <= '9';
 }
 
 char advance() {

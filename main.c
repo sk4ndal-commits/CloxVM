@@ -6,7 +6,7 @@
 int main(void) {
 
     initVM();
-    interpret("123.32");
+    interpret("var x = 5; \n fun hello(name) {print (name)}");
 
     return 0;
 }
