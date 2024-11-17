@@ -4,7 +4,7 @@
 #include "scanner.h"
 
 
-void compile(const char *source) {
+bool compile(const char *source, Chunk *chunk) {
     initScanner(source);
 
     int line = -1;
@@ -20,6 +20,8 @@ void compile(const char *source) {
 
         printf("%2d '%.*s'\n", token.type, token.length, token.start);
 
-        if (token.type == TOKEN_EOF) break;
+        if (token.type == TOKEN_EOF) return false;
     }
+
+    return true;
 }

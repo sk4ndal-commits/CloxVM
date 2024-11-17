@@ -1,6 +1,3 @@
-
-#include "chunk.h"
-#include "opcodes.h"
 #include "vm.h"
 
 int main(void) {
