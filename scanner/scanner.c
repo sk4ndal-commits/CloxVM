@@ -7,6 +7,8 @@
 #include <ctype.h>
 #include <string.h>
 
+Scanner scanner;
+
 Token makeToken(TokenType type);
 
 Token makeStringToken(TokenType type, const char *startIdx, const char *endIdx);
@@ -34,7 +36,6 @@ void skipWhitespace();
 
 static char peek();
 
-Scanner scanner;
 
 void initScanner(const char *source) {
     scanner.current = source;
