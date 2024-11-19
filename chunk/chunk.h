@@ -5,8 +5,8 @@
 #ifndef CLOXVM_CHUNK_H
 #define CLOXVM_CHUNK_H
 
-#include "common.h"
-#include "value.h"
+#include "../common.h"
+#include "../value/value.h"
 
 
 typedef struct {

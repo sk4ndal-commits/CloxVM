@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include "debug.h"
-#include "opcodes.h"
+#include "../enums/opcodes.h"
 
 int simpleInstruction(const char *name, int offset);
 

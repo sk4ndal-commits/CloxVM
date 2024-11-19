@@ -5,10 +5,10 @@
 #ifndef CLOXVM_VM_H
 #define CLOXVM_VM_H
 
-#include "common.h"
-#include "chunk.h"
-#include "interpretresult.h"
-#include "value.h"
+#include "../common.h"
+#include "../chunk/chunk.h"
+#include "../enums/interpretresult.h"
+#include "../value/value.h"
 
 #define STACK_MAX 256
 

@@ -5,7 +5,7 @@
 #ifndef CLOXVM_VALUE_H
 #define CLOXVM_VALUE_H
 
-#include "common.h"
+#include "../common.h"
 
 typedef double Value;
 

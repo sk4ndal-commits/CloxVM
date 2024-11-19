@@ -2,8 +2,11 @@
 // Created by sascha-roggatz on 25.10.24.
 //
 
-#include "chunk.h"
-#include "memory.h"
+#include "../chunk/chunk.h"
+#include "../memory/memory.h"
+
+#include <stdint.h>
+
 
 
 void initChunk(Chunk *chunk) {

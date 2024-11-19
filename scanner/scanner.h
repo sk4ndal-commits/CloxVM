@@ -1,7 +1,7 @@
 #ifndef CLOXVM_SCANNER_H
 #define CLOXVM_SCANNER_H
 
-#include "common.h"
+#include "../common.h"
 
 typedef enum {
     TOKEN_LEFT_PAREN, TOKEN_RIGHT_PAREN, TOKEN_LEFT_BRACE, TOKEN_RIGHT_BRACE,

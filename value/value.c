@@ -2,8 +2,8 @@
 // Created by sascha-roggatz on 26.10.24.
 //
 
-#include "value.h"
-#include "memory.h"
+#include "../value/value.h"
+#include "../memory/memory.h"
 
 void initValueArray(ValueArray *valueArray) {
     valueArray->count = 0;

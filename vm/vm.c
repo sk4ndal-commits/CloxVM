@@ -3,9 +3,9 @@
 //
 
 #include "vm.h"
-#include "opcodes.h"
-#include "debug.h"
-#include "compiler.h"
+#include "../enums/opcodes.h"
+#include "../debug/debug.h"
+#include "../compiler/compiler.h"
 #include <stdio.h>
 
 static void resetStack();

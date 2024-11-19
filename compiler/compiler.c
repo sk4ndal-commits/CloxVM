@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "compiler.h"
-#include "scanner.h"
+#include "../compiler/compiler.h"
+#include "../scanner/scanner.h"
 
 
 bool compile(const char *source, Chunk *chunk) {

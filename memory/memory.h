@@ -5,7 +5,7 @@
 #ifndef CLOXVM_MEMORY_H
 #define CLOXVM_MEMORY_H
 
-#include "common.h"
+#include "../common.h"
 
 #define GROW_CAPACITY(capacity) \
     ((capacity) < 8 ? 8 : (capacity * 2))
