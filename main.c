@@ -3,7 +3,7 @@
 int main(void) {
 
     initVM();
-    interpret("var x = 5; \n fun hello(name) {print (name)}");
+    interpret("-3 + 5 * 6");
 
     return 0;
 }

@@ -124,6 +124,7 @@ static InterpretResult run() {
                 printf("\n");
                 return INTERPRET_OK;
             }
+            default: break;
         }
     }
 
