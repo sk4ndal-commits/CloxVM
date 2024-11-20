@@ -37,12 +37,27 @@ void skipWhitespace();
 static char peek();
 
 
+/**
+ * Initializes the scanner to start scanning the provided source code.
+ *
+ * @param source The source code to be scanned.
+ */
 void initScanner(const char *source) {
     scanner.current = source;
     scanner.start = source;
     scanner.line = 1;
 }
 
+/**
+ * Scans the next token from the source code and returns it.
+ *
+ * This function handles different token types such as parentheses, braces,
+ * semicolons, operators, identifiers, numbers, and strings. It also skips
+ * whitespace and comments. If an unexpected character is encountered, an
+ * error token is returned.
+ *
+ * @return The next token in the source code.
+ */
 Token scanToken() {
     skipWhitespace();
 
@@ -90,6 +105,12 @@ Token scanToken() {
     return errorToken("Unexpected character");
 }
 
+/**
+ * Generates a token with the specified type.
+ *
+ * @param type The type of the token to be generated.
+ * @return The constructed token with the given type.
+ */
 Token makeToken(const TokenType type) {
     Token token;
     token.type = type;
@@ -99,6 +120,14 @@ Token makeToken(const TokenType type) {
     return token;
 }
 
+/**
+ * Creates a token for a string literal.
+ *
+ * @param type The type of the token.
+ * @param startIdx The starting index of the string literal in the source code.
+ * @param endIdx The ending index of the string literal in the source code.
+ * @return A token representing the string literal.
+ */
 Token makeStringToken(TokenType type, const char *startIdx,
                       const char *endIdx) {
     Token token;
@@ -110,6 +139,13 @@ Token makeStringToken(TokenType type, const char *startIdx,
     return token;
 }
 
+/**
+ * Creates a token representing an error with the provided error message.
+ *
+ * @param message The error message to associate with the error token.
+ * @return A Token object of type TOKEN_ERROR, initialized with the current
+ *         position and line number in the source code, and the length of the error message.
+ */
 Token errorToken(const char *message) {
     Token token;
     token.type = TOKEN_ERROR;
@@ -119,6 +155,17 @@ Token errorToken(const char *message) {
     return token;
 }
 
+/**
+ * Reads a string token from the source code.
+ *
+ * This function continues scanning characters until it encounters a closing
+ * double-quote character or the end of the source code. If a newline character
+ * is encountered within the string, it increments the line count.
+ * If the end of the source code is reached without finding a closing quote,
+ * an error token for an unterminated string is returned.
+ *
+ * @return A Token representing the string, or an error token if the string is unterminated.
+ */
 Token readString() {
     while (peek() != '"' && !isAtEnd()) {
         if (peek() == '\n') scanner.line++;
@@ -138,11 +185,30 @@ Token readString() {
         &end[-1]);
 }
 
+/**
+ * Reads an identifier from the source code.
+ *
+ * This function advances through characters, as long as they satisfy the
+ * condition of being alphabetic (a-z, A-Z) and the end of the source code
+ * has not been reached.
+ *
+ * @return A token representing the identifier.
+ */
 Token readIdentifier() {
     while (isalpha(peek()) && !isAtEnd()) advance();
     return makeToken(identifierType());
 }
 
+/**
+ * Determines the type of identifier based on the initial characters.
+ *
+ * The function checks the first character of an identifier and uses
+ * a switch statement to compare it against known keywords. If the
+ * identifier matches one of these keywords, the corresponding token type
+ * is returned.
+ *
+ * @return The token type corresponding to the identifier or TOKEN_IDENTIFIER if it doesn't match a keyword.
+ */
 static TokenType identifierType() {
     const char c = *scanner.start;
 
@@ -181,6 +247,15 @@ static TokenType identifierType() {
     return TOKEN_IDENTIFIER;
 }
 
+/**
+ * Checks if the current token matches a specific keyword.
+ *
+ * @param offset The offset in the current token where comparison starts.
+ * @param len_suffix The length of the suffix to compare.
+ * @param suffix The suffix to compare with the current token.
+ * @param type The token type to return if the keyword matches.
+ * @return The specified keyword token type if matched; otherwise, TOKEN_IDENTIFIER.
+ */
 TokenType checkKeyword(
     const int offset,
     const int len_suffix,
@@ -195,10 +270,22 @@ TokenType checkKeyword(
     return TOKEN_IDENTIFIER;
 }
 
+/**
+ * Checks if the scanner has reached the end of the source code.
+ *
+ * @return True if the scanner is at the end of the source code,
+ *         otherwise false.
+ */
 bool isAtEnd() {
     return *scanner.current == '\0';
 }
 
+/**
+ * Checks if the next character in the source is the expected character.
+ *
+ * @param expected The character to be matched.
+ * @return true if the next character matches the expected character, false otherwise.
+ */
 bool isNextToken(const char expected) {
     if (isAtEnd()) return false;
     if (*scanner.current != expected) return false;
@@ -207,6 +294,14 @@ bool isNextToken(const char expected) {
     return true;
 }
 
+/**
+ * Reads a numeric value from the source code, recognizing both integers and floating-point numbers.
+ *
+ * The function continues to consume digits until it encounters a non-digit character. If a decimal
+ * point is found and it is followed by more digits, the function treats this as a floating-point number.
+ *
+ * @return A token of type TOKEN_NUMBER.
+ */
 Token readNumber() {
     while (isdigit(peek())) advance();
 
@@ -218,11 +313,23 @@ Token readNumber() {
     return makeToken(TOKEN_NUMBER);
 }
 
+/**
+ * Advances to the next character in the source code and returns the current character.
+ *
+ * @return The current character after advancing.
+ */
 char advance() {
     scanner.current++;
     return scanner.current[-1];
 }
 
+/**
+ * Skips over any whitespace characters in the input source code.
+ *
+ * This function advances the scanner's current position past any spaces,
+ * carriage returns, tabs, and new line characters. It updates the line count
+ * for new line characters.
+ */
 void skipWhitespace() {
     for (;;) {
         const char c = peek();
@@ -243,6 +350,11 @@ void skipWhitespace() {
     }
 }
 
+/**
+ * Peeks at the current character in the scanner without consuming it.
+ *
+ * @return The current character being pointed to by the scanner.
+ */
 static char peek() {
     return *scanner.current;
 }
